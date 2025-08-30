@@ -8,10 +8,12 @@ using System.IO;
 /// </summary>
 public class QuizManager : MonoBehaviour
 {
-    const string QUESTIONS_FILE_NAME = "questions"; 
+    const string QUESTIONS_FILE_NAME = "questions";
 
     [SerializeField]
-    private UIManager uiManager;
+    private Component UiManagerComponent;
+
+    private IQuizUI uiManager;
 
     private QuestionsList questionsList;
     private int score;
@@ -19,15 +21,14 @@ public class QuizManager : MonoBehaviour
 
     void Awake()
     {
-        if (uiManager == null)
+        if (UiManagerComponent == null)
         {
-            Debug.LogWarning("UIManager is not assigned in the inspector");
-
-            if(!TryGetComponent<UIManager>(out uiManager))
-            {
-                Debug.LogError("UIManager is not found");
-                return;
-            }
+            Debug.LogWarning("UIManager component is not assigned");
+        }
+        else if (!UiManagerComponent.TryGetComponent<IQuizUI>(out uiManager))
+        {
+            Debug.LogError("UIManager is not found");
+            return;
         }
     }
 
@@ -48,7 +49,7 @@ public class QuizManager : MonoBehaviour
         }
         catch (System.Exception e)
         {
-            uiManager.PrintError(e.Message);
+            uiManager.DisplayError(e.Message);
         }
     }
 

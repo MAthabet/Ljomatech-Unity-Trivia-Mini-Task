@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 ///  class to control all the game ui elemnts 
 /// </summary>
-public class UIManager : MonoBehaviour
+public class UIManager : MonoBehaviour, IQuizUI
 {
     [Header("UI Elemnts")]
     [SerializeField]
@@ -31,7 +31,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void PrintError(string message)
+    public void DisplayError(string message)
     {
         ShowPanel(PanelType.ErrorPanel);
 
@@ -44,7 +44,7 @@ public class UIManager : MonoBehaviour
     /// <summary>
     /// Activating the target panel without deactivating any other panel
     /// </summary>
-    private void ShowPanel(PanelType panel)
+    public void ShowPanel(PanelType panel)
     {
         foreach (var p in panelsList)
         {
