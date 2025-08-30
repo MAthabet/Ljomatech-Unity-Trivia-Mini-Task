@@ -1,0 +1,106 @@
+{
+  "questions": [
+    {
+      "questionText": "What programming language is primarily used for scripting in Unity today?",
+      "answers": [
+        "JavaScript",
+        "Boo",
+        "C#",
+        "Python"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which built-in Unity system is used for handling physics simulations like collisions and rigid bodies?",
+      "answers": [
+        "NavMesh",
+        "Rigidbody",
+        "Animator",
+        "Sprite Renderer"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "In Unity, what is a Prefab?",
+      "answers": [
+        "A compressed project file",
+        "A reusable GameObject template",
+        "A physics collider",
+        "A scene lighting setting"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Unity was originally released in which year?",
+      "answers": [
+        "2002",
+        "2005",
+        "2007",
+        "2010"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "Which Unity feature is primarily used for creating 2D pathfinding for characters?",
+      "answers": [
+        "Rigidbody2D",
+        "Sprite Atlas",
+        "NavMesh",
+        "Tilemap"
+      ],
+      "correctAnswerIndex": 2
+    },
+    {
+      "questionText": "Which game is often credited as the first commercially successful video game?",
+      "answers": [
+        "Pong",
+        "Space Invaders",
+        "Pac-Man",
+        "Asteroids"
+      ],
+      "correctAnswerIndex": 0
+    },
+    {
+      "questionText": "Who is known as the creator of Super Mario Bros.?",
+      "answers": [
+        "Hideo Kojima",
+        "Shigeru Miyamoto",
+        "Satoshi Tajiri",
+        "Yu Suzuki"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "The Unreal Engine was first introduced with which game?",
+      "answers": [
+        "Unreal Tournament",
+        "Unreal",
+        "Gears of War",
+        "Quake"
+      ],
+      "correctAnswerIndex": 1
+    },
+    {
+      "questionText": "What was the first 3D polygonal game console released to the public?",
+      "answers": [
+        "PlayStation",
+        "Sega Saturn",
+        "Nintendo 64",
+        "Atari Jaguar"
+      ],
+      "correctAnswerIndex": 3
+    },
+    {
+      "questionText": "Which company developed the game engine 'id Tech,' first used in Doom (1993)?",
+      "answers": [
+        "Valve",
+        "Epic Games",
+        "id Software",
+        "Bungie"
+      ],
+      "correctAnswerIndex": 2
+    }
+  ]
+}
+
+

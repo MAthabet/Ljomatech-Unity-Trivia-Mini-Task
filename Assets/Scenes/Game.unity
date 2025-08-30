@@ -612,6 +612,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 260370310}
+  - component: {fileID: 260370313}
+  - component: {fileID: 260370312}
+  - component: {fileID: 260370311}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Untagged
@@ -634,6 +637,53 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &260370311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260370309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1af5d05747fe804faa280fc9950bda6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  panelsList:
+  - type: 0
+    panelObject: {fileID: 6917096}
+  - type: 1
+    panelObject: {fileID: 958757371}
+  - type: 2
+    panelObject: {fileID: 1174668797}
+  - type: 3
+    panelObject: {fileID: 1756863179}
+  errorText: {fileID: 0}
+--- !u!114 &260370312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260370309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e510e13b872ad254f85a86798ba30e2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &260370313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 260370309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82c59a40534a9484eaa0d3ed4d199d1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiManager: {fileID: 260370311}
 --- !u!1 &386918347
 GameObject:
   m_ObjectHideFlags: 0
@@ -1994,7 +2044,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1188233256}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 260370313}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: TryStartGame
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1188233256
 MonoBehaviour:
   m_ObjectHideFlags: 0
