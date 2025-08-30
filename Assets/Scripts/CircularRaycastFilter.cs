@@ -19,7 +19,7 @@ public class CircularRaycastFilter : MonoBehaviour, ICanvasRaycastFilter
 
     void Start()
     {
-        // Calculate the radius based on the RectTransform width
+        // radius is half the width - assuming a square rect transform (circular image)
         imageCircleRadius = rectTransform.rect.width / 2;
 
         // Calculate the position of the circle center relative to the pivot.
