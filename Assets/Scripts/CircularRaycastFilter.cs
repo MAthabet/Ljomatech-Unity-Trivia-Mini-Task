@@ -6,8 +6,10 @@ using UnityEngine.UI;
 public class CircularRaycastFilter : MonoBehaviour, ICanvasRaycastFilter
 {
     private Image buttonImage;
-    private float imageCircleRadius;
     private RectTransform rectTransform;
+
+    private float imageCircleRadius;
+    private Vector2 centerOffset;
 
     void Awake()
     {
@@ -19,6 +21,11 @@ public class CircularRaycastFilter : MonoBehaviour, ICanvasRaycastFilter
     {
         // Calculate the radius based on the RectTransform width
         imageCircleRadius = rectTransform.rect.width / 2;
+
+        // Calculate the position of the circle center relative to the pivot.
+        float centerX = (0.5f - rectTransform.pivot.x) * rectTransform.rect.width;
+        float centerY = (0.5f - rectTransform.pivot.y) * rectTransform.rect.height;
+        centerOffset = new Vector2(centerX, centerY);
     }
 
     // Check If the Mouse position is valid (within the circular area of the button)
@@ -38,8 +45,8 @@ public class CircularRaycastFilter : MonoBehaviour, ICanvasRaycastFilter
             out Vector2 localPoint
         );
 
-        // Calculate the distance of the click from the center of the button(0,0)
-        float distance = Vector2.Distance(localPoint, Vector2.zero);
+        // Calculate the distance of the click from the center of the button
+        float distance = Vector2.Distance(localPoint, centerOffset);
 
         // Allow the click if in the circle bounds
         return distance <= imageCircleRadius;
