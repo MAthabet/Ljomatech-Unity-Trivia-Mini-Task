@@ -1,6 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// helper component for circular buttons
+/// </summary>
 [RequireComponent(typeof(RectTransform))]
 [RequireComponent(typeof(Image))]
 public class CircularRaycastFilter : MonoBehaviour, ICanvasRaycastFilter

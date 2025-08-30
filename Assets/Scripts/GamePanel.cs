@@ -9,7 +9,7 @@ public enum PanelType
 }
 
 [System.Serializable]
-public class Panel
+public class GamePanel
 {
     public PanelType type;
     public GameObject panelObject;

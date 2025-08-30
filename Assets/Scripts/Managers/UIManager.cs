@@ -2,13 +2,18 @@ using System.Collections.Generic;
 using TMPro;    
 using UnityEngine;
 
+/// <summary>
+///  class to control all the game ui elemnts 
+/// </summary>
 public class UIManager : MonoBehaviour
 {
     [Header("UI Elemnts")]
     [SerializeField]
-    private List<Panel> panelsList;
+    private List<GamePanel> panelsList;
     [SerializeField]
     private TMP_Text errorText;
+
+    private Dictionary<PanelType, GameObject> panelsDictionary;
 
     void Start()
     {

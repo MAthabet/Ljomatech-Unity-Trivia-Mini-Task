@@ -3,15 +3,21 @@ using TMPro;
 using System.Collections.Generic;
 using System.IO;
 
-public class GameManager : MonoBehaviour
+/// <summary>
+///  class to control the quiz flow and results
+/// </summary>
+public class QuizManager : MonoBehaviour
 {
+    const string QUESTIONS_FILE_NAME = "questions"; 
+
     [SerializeField]
     private UIManager uiManager;
 
     private QuestionsList questionsList;
+    private int score;
+    private int currentQuestionIndex;
 
-    const string QUESTIONS_FILE_NAME = "questions";
-    void Start()
+    void Awake()
     {
         if (uiManager == null)
         {
