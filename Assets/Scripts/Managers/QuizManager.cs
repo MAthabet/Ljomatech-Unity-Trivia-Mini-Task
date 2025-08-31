@@ -51,7 +51,7 @@ public class QuizManager : MonoBehaviour
             LoadQuestionsFromJsonFile();
             PrepareQuiz();
             
-            GameEvents.BroadcastQuizStart();
+            GameEvents.BroadcastQuizStart(questionsList.Count);
             Debug.Log($"Game started successfully with {maxScore} questions!");
         }
         catch (System.Exception e)
@@ -98,10 +98,11 @@ public class QuizManager : MonoBehaviour
     }
 
     /// <summary>
-    ///  reset score and questions
+    ///  reset score and questions also stops all timers
     /// </summary>
     public void ResetQuiz()
     {
+        StopAllCoroutines();
         PrepareQuiz();
         GameEvents.BroadcastQuizRestart();
     }
@@ -200,11 +201,12 @@ public class QuizManager : MonoBehaviour
     {
         yield return new WaitForSeconds(time);
         GameEvents.BroadcastQuestionTimerExpired();
+        StartCoroutine(StartNextQuestionAfterDelay(timeToMoveToNextQuestion));
     }
     private void OnDisable()
     {
         GameEvents.OnAnswerSelected -= HandleAnswerSelection;
-        GameEvents.OnQuizStart -= TryStartGame;
+        GameEvents.OnStartQuizRequested -= TryStartGame;
         //GameEvents.OnNextQuestionClicked -= NextQuestion;
     }
 }

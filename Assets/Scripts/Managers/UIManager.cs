@@ -72,7 +72,7 @@ public class UIManager : MonoBehaviour
     //}
     private void OnEnable()
     {
-        GameEvents.OnQuizStart += () => ShowPanelOnly(PanelType.QuizPanel);
+        GameEvents.OnQuizStart += (ctx) => ShowPanelOnly(PanelType.QuizPanel);
         GameEvents.OnQuizReset += ResetQuizUI;
         GameEvents.OnQuizEnd += (hasPassed) => DisplayQuizResult(hasPassed);
 
@@ -206,6 +206,15 @@ public class UIManager : MonoBehaviour
             btn.SetTextColor(GameColors.TextBlue);
         }
     }
+    private void DisablingAllAnswerButtons()
+    {
+        foreach (var btn in answerButtons)
+        {
+            btn.SetBtnInteractablity(false);
+            btn.SetButtonColor(GameColors.PrimaryWhite, GameColors.DisabledGray);
+            btn.SetTextColor(GameColors.TextGray);
+        }
+    }
 
     /// <summary>
     /// change question bubble background and text color
@@ -269,7 +278,7 @@ public class UIManager : MonoBehaviour
 
     private void OnDisable()
     {
-        GameEvents.OnQuizStart -= () => ShowPanelOnly(PanelType.QuizPanel);
+        GameEvents.OnQuizStart -= (ctx) => ShowPanelOnly(PanelType.QuizPanel);
         GameEvents.OnQuizReset -= ResetQuizUI;
         GameEvents.OnQuizEnd -= (hasPassed) => DisplayQuizResult(hasPassed);
 

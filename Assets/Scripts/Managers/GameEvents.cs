@@ -8,7 +8,7 @@ public static class GameEvents
     // event that will be broadcast when an answer button is clicked.
     public static event Action OnStartQuizRequested;
 
-    public static event Action OnQuizStart;
+    public static event Action<int> OnQuizStart;
     public static event Action<int> OnAnswerSelected;
     public static event Action<bool, int> OnAnswerProcessed;
     public static event Action<Question, int> OnQuestionUpdated;
@@ -22,9 +22,9 @@ public static class GameEvents
     /// <summary>
     /// broadcast the start of the quiz (after parsing json file)
     /// </summary>
-    public static void BroadcastQuizStart()
+    public static void BroadcastQuizStart(int totalQuestionsNumber)
     {
-        OnQuizStart?.Invoke();
+        OnQuizStart?.Invoke(totalQuestionsNumber);
     }
 
     /// <summary>
