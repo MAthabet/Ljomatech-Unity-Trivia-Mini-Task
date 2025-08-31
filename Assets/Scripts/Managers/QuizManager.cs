@@ -28,6 +28,8 @@ public class QuizManager : MonoBehaviour
     [SerializeField]
     private float timeToRestartQuiz = 10f;
     [SerializeField]
+    private float timeToMoveToNextQuestion = 2f;
+    [SerializeField]
     private int answersPerQuestion = 4;
 
 
@@ -36,6 +38,7 @@ public class QuizManager : MonoBehaviour
 
     private List<Question> questionsList;
     private int score;
+    private int totalScore;
     private int currentQuestionIndex;
 
     void Awake()
@@ -54,6 +57,7 @@ public class QuizManager : MonoBehaviour
     {
         GameEvents.OnAnswerSelected += HandleAnswerSelection;
         GameEvents.OnQuizStart += TryStartGame;
+        //GameEvents.OnNextQuestionClicked += NextQuestion;
     }
 
     /// <summary>
@@ -68,7 +72,9 @@ public class QuizManager : MonoBehaviour
             uiManager.ShowPanelOnly(PanelType.QuizPanel);
 
             PrepareQuiz();
-            Debug.Log($"Game started successfully with {questionsList.Count} questions!");
+            DisplayQuestion(currentQuestionIndex);
+            totalScore = questionsList.Count;
+            Debug.Log($"Game started successfully with {totalScore} questions!");
             
         }
         catch (System.Exception e)
@@ -90,12 +96,13 @@ public class QuizManager : MonoBehaviour
         }
 
         QuestionsList qArray = JsonUtility.FromJson<QuestionsList>(jsonFile.text);
-        questionsList = new List<Question>(qArray.questions);
 
         if (questionsList == null || questionsList.Count == 0)
         {
             throw new System.Exception("JSON file is empty or does not contain a valid questions format");
         }
+
+        questionsList = new List<Question>(qArray.questions);
     }
 
     /// <summary>
@@ -108,6 +115,35 @@ public class QuizManager : MonoBehaviour
         //TODO:
         // shuffle questions
     }
+    private void NextQuestion()
+    {
+        DisplayQuestion(currentQuestionIndex + 1);
+    }
+
+    /// <summary>
+    /// set the current question to the target index or end the quiz if the index is out of bounds
+    /// also it tell ui manager to update the ui
+    /// </summary>
+    /// <param name="targetQuestionIndex"></param>
+    private void DisplayQuestion(int targetQuestionIndex)
+    {
+        currentQuestionIndex = targetQuestionIndex;
+
+        if (currentQuestionIndex >= totalScore)
+        {
+            EndQuiz();
+            return;
+        }
+
+        uiManager.ResetFeedback();
+        Question q = questionsList[currentQuestionIndex];
+        uiManager.UpdateQuizUI(q);
+    }
+
+    /// <summary>
+    /// handle score and tell ui manager to feedback when an answer is selected
+    /// </summary>
+    /// <param name="selectedIndex"></param>
     private void HandleAnswerSelection(int selectedIndex)
     {
         if (selectedIndex >= answersPerQuestion || selectedIndex < 0)
@@ -131,9 +167,14 @@ public class QuizManager : MonoBehaviour
 
         return q.correctAnswerIndex == AnswerIndex;
     }
+    private void EndQuiz()
+    {
+        throw new NotImplementedException();
+    }
     void OnDisable()
     {
         GameEvents.OnAnswerSelected -= HandleAnswerSelection;
         GameEvents.OnQuizStart -= TryStartGame;
+        //GameEvents.OnNextQuestionClicked -= NextQuestion;
     }
 }

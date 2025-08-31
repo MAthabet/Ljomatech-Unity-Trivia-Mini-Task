@@ -7,8 +7,8 @@ public static class GameEvents
 {
     // event that will be broadcast when an answer button is clicked.
     public static event Action<int> OnAnswerSelected;
-
     public static event Action OnQuizStart;
+    //public static event Action OnNextQuestionClicked;
 
     /// <summary>
     /// Any AnswerButton can call this method to broadcast its index to all listeners.
@@ -24,4 +24,14 @@ public static class GameEvents
     {
         OnQuizStart?.Invoke();
     }
+
+    /*
+    /// <summary>
+    /// Next Question Button Call This methosd to broadcast the next question event
+    /// </summary>
+    public static void NextQuestion()
+    {
+        OnNextQuestionClicked?.Invoke();
+    }
+    */
 }

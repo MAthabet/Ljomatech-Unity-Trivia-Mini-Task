@@ -1,6 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
-public class StartButton : MonoBehaviour
+
+/// <summary>
+/// component to handle start quiz button events
+/// </summary>
+[RequireComponent(typeof(Button))]
+public class StartQuizButton : MonoBehaviour
 {
     private Button button;
 

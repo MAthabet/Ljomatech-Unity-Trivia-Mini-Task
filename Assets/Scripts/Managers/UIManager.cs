@@ -12,11 +12,18 @@ public class UIManager : MonoBehaviour, IQuizUI
     private List<GamePanel> panelsList;
     [SerializeField]
     private TMP_Text errorText;
+    [SerializeField]
+    private TMP_Text questionText;
+    [SerializeField]
+    [Tooltip("List of answer buttons in ORDER")]
+    private List<AnswerButton> answerButtons;
 
     private Dictionary<PanelType, GameObject> panelsDictionary;
 
     void Start()
     {
+        InitializeAnwerButtons();
+
         if (panelsList == null || panelsList.Count == 0)
         {
             Debug.LogError("panelsList not assigned in the inspector");
@@ -73,9 +80,17 @@ public class UIManager : MonoBehaviour, IQuizUI
         }
     }
 
+    /// <summary>
+    /// Uodate question text and answer buttons
+    /// </summary>
     public void UpdateQuizUI(Question question)
     {
-        throw new System.NotImplementedException();
+        questionText.SetText(question.questionText);
+        int n = answerButtons.Count;
+        for (int i = 0; i < n; i++)
+        {
+            answerButtons[i].SetButtonText(question.answers[i]);
+        }
     }
 
     public void ShowCorrectFeedback(int buttonIndex)
@@ -88,8 +103,24 @@ public class UIManager : MonoBehaviour, IQuizUI
         throw new System.NotImplementedException();
     }
 
+    /// <summary>
+    /// reset quiz ui and answer buttons to default state and hide any feedback
+    /// </summary>
     public void ResetFeedback()
     {
-        throw new System.NotImplementedException();
+    }
+
+    private void InitializeAnwerButtons()
+    {
+        int n = answerButtons.Count;
+        if (n == 0)
+        {
+            Debug.LogWarning("answerButtons list is not assigned in the inspector");
+            return;
+        }
+        for (int i = 0; i < n; i++)
+        {
+            answerButtons[i].ButtonInit(i);
+        }
     }
 }
