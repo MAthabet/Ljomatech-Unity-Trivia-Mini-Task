@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 ///  class to control all the game ui elemnts 
 /// </summary>
-public class UIManager : MonoBehaviour, IQuizUI
+public class UIManager : MonoBehaviour
 {
     [Header("UI Elemnts")]
     [SerializeField]
@@ -18,7 +18,7 @@ public class UIManager : MonoBehaviour, IQuizUI
     [Tooltip("List of answer buttons in ORDER")]
     private List<AnswerButton> answerButtons;
 
-    private Dictionary<PanelType, GameObject> panelsDictionary;
+    //private Dictionary<PanelType, GameObject> panelsDictionary;
 
     void Start()
     {
@@ -37,6 +37,15 @@ public class UIManager : MonoBehaviour, IQuizUI
             Debug.LogWarning("errorText not assigned in the inspector");
         }
     }
+
+    //private void InitializePanelsDictionary()
+    //{
+    //    panelsDictionary = new Dictionary<PanelType, GameObject>();
+    //    foreach (var p in panelsList)
+    //    {
+    //        panelsDictionary.Add(p.type, p.panelObject);
+    //    }
+    //}
 
     public void DisplayError(string message)
     {

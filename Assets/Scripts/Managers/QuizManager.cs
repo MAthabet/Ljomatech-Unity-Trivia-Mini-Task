@@ -9,12 +9,6 @@ using System;
 /// </summary>
 public class QuizManager : MonoBehaviour
 {
-
-
-    [SerializeField]
-    [Tooltip("Component that implemnts IQuizUI")]
-    private Component UiManagerComponent;
-
     [Header("Quiz Settings")]
     [SerializeField]
     private string questionsJSONFileName = "questions";
@@ -32,31 +26,15 @@ public class QuizManager : MonoBehaviour
     [SerializeField]
     private int answersPerQuestion = 4;
 
-
-
-    private IQuizUI uiManager;
-
     private List<Question> questionsList;
     private int score;
     private int totalScore;
     private int currentQuestionIndex;
 
-    void Awake()
-    {
-        if (UiManagerComponent == null)
-        {
-            Debug.LogWarning("UIManager component is not assigned");
-        }
-        else if (!UiManagerComponent.gameObject.TryGetComponent<IQuizUI>(out uiManager))
-        {
-            Debug.LogError("UIManager is not found");
-            return;
-        }
-    }
     void OnEnable()
     {
         GameEvents.OnAnswerSelected += HandleAnswerSelection;
-        GameEvents.OnQuizStart += TryStartGame;
+        GameEvents.OnStartClicked += TryStartGame;
         //GameEvents.OnNextQuestionClicked += NextQuestion;
     }
 
@@ -68,11 +46,8 @@ public class QuizManager : MonoBehaviour
         try
         {
             LoadQuestionsFromJsonFile();
-
-            uiManager.ShowPanelOnly(PanelType.QuizPanel);
-
             PrepareQuiz();
-            DisplayQuestion(currentQuestionIndex);
+            ChangeCurrentQuestion(currentQuestionIndex);
             totalScore = questionsList.Count;
             Debug.Log($"Game started successfully with {totalScore} questions!");
             
@@ -117,7 +92,7 @@ public class QuizManager : MonoBehaviour
     }
     private void NextQuestion()
     {
-        DisplayQuestion(currentQuestionIndex + 1);
+        ChangeCurrentQuestion(currentQuestionIndex + 1);
     }
 
     /// <summary>
@@ -125,7 +100,7 @@ public class QuizManager : MonoBehaviour
     /// also it tell ui manager to update the ui
     /// </summary>
     /// <param name="targetQuestionIndex"></param>
-    private void DisplayQuestion(int targetQuestionIndex)
+    private void ChangeCurrentQuestion(int targetQuestionIndex)
     {
         currentQuestionIndex = targetQuestionIndex;
 
