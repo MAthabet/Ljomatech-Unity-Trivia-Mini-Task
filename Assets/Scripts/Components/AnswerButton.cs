@@ -22,13 +22,12 @@ public class AnswerButton : MonoBehaviour
     public void AnswerButtonInit(int index)
     {
         buttonIndex = index;
-        button.onClick.AddListener(OnButtonClicked);
+        button.onClick.AddListener(OnAnswerSelected);
     }
 
-    void OnButtonClicked()
+    void OnAnswerSelected()
     {
-        //fire event when clicked with the index
-
+        GameEvents.AnswerSelected(buttonIndex);
     }
 
 }
