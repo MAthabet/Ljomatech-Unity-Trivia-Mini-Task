@@ -56,4 +56,7 @@ public class QuestionTab : MonoBehaviour
             Debug.LogError("Tab Number Text Cannot be found");
         }
     }
+
+    //TODO
+    //Make tabs button to switch between questions
 }

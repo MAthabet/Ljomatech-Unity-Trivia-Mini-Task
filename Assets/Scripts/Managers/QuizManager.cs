@@ -36,7 +36,7 @@ public class QuizManager : MonoBehaviour
 
     void OnEnable()
     {
-        GameEvents.OnAnswerSelected += (answerindex) => HandleAnswerSelection(answerindex);
+        GameEvents.OnAnswerSelected += HandleAnswerSelection;
         GameEvents.OnStartQuizRequested += TryStartGame;
         //GameEvents.OnNextQuestionClicked += NextQuestion;
     }
@@ -157,11 +157,11 @@ public class QuizManager : MonoBehaviour
         if (IsAnswerCorrect(selectedIndex))
         {
             score++;
-            GameEvents.BroadcastAnswerFeedback(selectedIndex, true);
+            GameEvents.BroadcastAnswerFeedback(currentQuestionIndex,selectedIndex, true);
         }
         else
         {
-            GameEvents.BroadcastAnswerFeedback(selectedIndex, false);
+            GameEvents.BroadcastAnswerFeedback(currentQuestionIndex,selectedIndex, false);
         }
 
         StartCoroutine(StartNextQuestionAfterDelay(timeToMoveToNextQuestion));
@@ -200,7 +200,7 @@ public class QuizManager : MonoBehaviour
     private IEnumerator StartQuestionTimer(float time)
     {
         yield return new WaitForSeconds(time);
-        GameEvents.BroadcastQuestionTimerExpired();
+        GameEvents.BroadcastQuestionTimerExpired(currentQuestionIndex);
         StartCoroutine(StartNextQuestionAfterDelay(timeToMoveToNextQuestion));
     }
     private void OnDisable()

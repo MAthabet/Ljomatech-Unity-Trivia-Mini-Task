@@ -17,14 +17,24 @@ public class QuestionTabsManager : MonoBehaviour
     
     private void OnEnable()
     {
-        GameEvents.OnQuizStart += (count) => OnQuizLoaded(count);
-        GameEvents.OnAnswerProcessed += (isCorrect, questionIndex)  => FeedbackTab(isCorrect, questionIndex);
+        GameEvents.OnQuizStart += OnQuizLoaded;
+        GameEvents.OnAnswerProcessed += HandleProcessedAnswer;
+        GameEvents.OnQuestionTimerExpired += HandleTimeUp;
         GameEvents.OnQuizReset += ResetTabs;
+    }
+
+    private void HandleTimeUp(int questionIndex)
+    {
+        FeedbackTab(questionIndex, false);
+    }
+    private void HandleProcessedAnswer(int questionIndex, int foo, bool isCorrect)
+    {
+        FeedbackTab(questionIndex, isCorrect);
     }
     /// <summary>
     /// mark the tab as wrong or correct
     /// </summary>
-    private void FeedbackTab(bool isCorrect, int questionIndex)
+    private void FeedbackTab(int questionIndex, bool isCorrect)
     {
         if (questionIndex < 0 || questionIndex >= tabs.Count)
         {
@@ -73,7 +83,7 @@ public class QuestionTabsManager : MonoBehaviour
         foreach(QuestionTab tab in tabs)
         {
             tab.ChangeTextColor(GameColors.TextGray);
-            tab.ChangeTabColor(GameColors.DisabledGray);
+            tab.ChangeTabColor(GameColors.PrimaryWhite);
         }
     }
     public void DestroyAllChildren()
@@ -89,7 +99,9 @@ public class QuestionTabsManager : MonoBehaviour
 
     private void OnDisable()
     {
-        GameEvents.OnQuizStart -= (count) => OnQuizLoaded(count);
+        GameEvents.OnQuizStart -= OnQuizLoaded;
+        GameEvents.OnAnswerProcessed -= HandleProcessedAnswer;
+        GameEvents.OnQuestionTimerExpired -= HandleTimeUp;
         GameEvents.OnQuizReset -= ResetTabs;
     }
 }

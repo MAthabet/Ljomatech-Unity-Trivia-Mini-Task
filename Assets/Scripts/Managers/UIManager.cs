@@ -72,20 +72,30 @@ public class UIManager : MonoBehaviour
     //}
     private void OnEnable()
     {
-        GameEvents.OnQuizStart += (ctx) => ShowPanelOnly(PanelType.QuizPanel);
+        GameEvents.OnQuizStart += HandleQuizStart;
         GameEvents.OnQuizReset += ResetQuizUI;
-        GameEvents.OnQuizEnd += (hasPassed) => DisplayQuizResult(hasPassed);
+        GameEvents.OnQuizEnd += DisplayQuizResult;
 
-        GameEvents.OnAnswerProcessed += (isCorrect, answerIndex) => ShowFeedback(answerIndex, isCorrect);
-        GameEvents.OnQuestionUpdated += (currentQuestion, currntQuestionNumber) => OnQuestionUpdated(currentQuestion, currntQuestionNumber);
+        GameEvents.OnAnswerProcessed += HandleProcessedAnswer;
+        GameEvents.OnQuestionUpdated += OnQuestionUpdated;
 
-        GameEvents.OnError += (errorMsg) => DisplayError(errorMsg);
+        GameEvents.OnError += DisplayError;
     }
 
     private void ResetQuizUI()
     {
         ShowPanelOnly(PanelType.QuizPanel);
         ResetFeedback();
+    }
+
+    private void HandleQuizStart(int foo)
+    {
+        ShowPanelOnly(PanelType.QuizPanel);
+    }
+
+    private void HandleProcessedAnswer(int foo, int answerIndex, bool isCorrect)
+    {
+        ShowFeedback(answerIndex, isCorrect);
     }
 
     private void DisplayError(string message)
@@ -278,13 +288,13 @@ public class UIManager : MonoBehaviour
 
     private void OnDisable()
     {
-        GameEvents.OnQuizStart -= (ctx) => ShowPanelOnly(PanelType.QuizPanel);
+        GameEvents.OnQuizStart -= HandleQuizStart;
         GameEvents.OnQuizReset -= ResetQuizUI;
-        GameEvents.OnQuizEnd -= (hasPassed) => DisplayQuizResult(hasPassed);
+        GameEvents.OnQuizEnd -= DisplayQuizResult;
 
-        GameEvents.OnAnswerProcessed -= (isCorrect, answerIndex) => ShowFeedback(answerIndex, isCorrect);
-        GameEvents.OnQuestionUpdated -= (currentQuestion, currntQuestionNumber) => OnQuestionUpdated(currentQuestion, currntQuestionNumber);
+        GameEvents.OnAnswerProcessed -= HandleProcessedAnswer;
+        GameEvents.OnQuestionUpdated -= OnQuestionUpdated;
 
-        GameEvents.OnError -= (errorMsg) => DisplayError(errorMsg);
+        GameEvents.OnError -= DisplayError;
     }
 }
