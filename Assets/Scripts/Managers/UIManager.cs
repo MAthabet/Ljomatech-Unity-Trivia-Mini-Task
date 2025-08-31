@@ -73,5 +73,23 @@ public class UIManager : MonoBehaviour, IQuizUI
         }
     }
 
+    public void UpdateQuizUI(Question question)
+    {
+        throw new System.NotImplementedException();
+    }
 
+    public void ShowCorrectFeedback(int buttonIndex)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void ShowWrongFeedback(int buttonIndex)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void ResetFeedback()
+    {
+        throw new System.NotImplementedException();
+    }
 }

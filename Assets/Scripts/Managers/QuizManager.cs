@@ -10,6 +10,7 @@ using System;
 public class QuizManager : MonoBehaviour
 {
 
+
     [SerializeField]
     [Tooltip("Component that implemnts IQuizUI")]
     private Component UiManagerComponent;
@@ -26,12 +27,14 @@ public class QuizManager : MonoBehaviour
     private float timePerQuestion = 10f;
     [SerializeField]
     private float timeToRestartQuiz = 10f;
+    [SerializeField]
+    private int answersPerQuestion = 4;
 
 
 
     private IQuizUI uiManager;
 
-    private QuestionsList questionsList;
+    private List<Question> questionsList;
     private int score;
     private int currentQuestionIndex;
 
@@ -65,7 +68,7 @@ public class QuizManager : MonoBehaviour
             uiManager.ShowPanelOnly(PanelType.QuizPanel);
 
             PrepareQuiz();
-            Debug.Log($"Game started successfully with {questionsList.questions.Length} questions!");
+            Debug.Log($"Game started successfully with {questionsList.Count} questions!");
             
         }
         catch (System.Exception e)
@@ -86,23 +89,47 @@ public class QuizManager : MonoBehaviour
             throw new FileNotFoundException($"JSON file not found at 'Assets/Resources/{questionsJSONFileName}.json'");
         }
 
-        questionsList = JsonUtility.FromJson<QuestionsList>(jsonFile.text);
+        QuestionsList qArray = JsonUtility.FromJson<QuestionsList>(jsonFile.text);
+        questionsList = new List<Question>(qArray.questions);
 
-        if (questionsList == null || questionsList.questions.Length == 0)
+        if (questionsList == null || questionsList.Count == 0)
         {
             throw new System.Exception("JSON file is empty or does not contain a valid questions format");
         }
     }
-    private void HandleAnswerSelection(int selectedAnswerIndex)
-    {
 
-    }
+    /// <summary>
+    ///  reset quiz and reshuffle questions
+    /// </summary>
     private void PrepareQuiz()
     {
         score = 0;
         currentQuestionIndex = 0;
         //TODO:
         // shuffle questions
+    }
+    private void HandleAnswerSelection(int selectedIndex)
+    {
+        if (selectedIndex >= answersPerQuestion || selectedIndex < 0)
+        {
+            Debug.LogError("Answer Out Of Bounds");
+            return;
+        }
+        if (IsAnswerCorrect(selectedIndex))
+        {
+            score++;
+            uiManager.ShowCorrectFeedback(selectedIndex);
+        }
+        else
+        {
+            uiManager.ShowWrongFeedback(selectedIndex);
+        }
+    }
+    private bool IsAnswerCorrect(int AnswerIndex)
+    {
+        Question q = questionsList[currentQuestionIndex];
+
+        return q.correctAnswerIndex == AnswerIndex;
     }
     void OnDisable()
     {
