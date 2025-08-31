@@ -84,7 +84,8 @@ public class UIManager : MonoBehaviour
 
     private void ResetQuizUI()
     {
-        throw new NotImplementedException();
+        ShowPanelOnly(PanelType.QuizPanel);
+        ResetFeedback();
     }
 
     private void DisplayError(string message)
@@ -169,17 +170,17 @@ public class UIManager : MonoBehaviour
                 temp.SetTextColor(GameColors.TextWhite);
                 if (isCorrect)
                 {
-                    temp.SetButtonColor(GameColors.CorrectAnswer);
+                    temp.SetButtonColor(GameColors.CorrectAnswer, GameColors.DisabledGray);
                 }
                 else
                 {
-                    temp.SetButtonColor(GameColors.WrongAnswer);
+                    temp.SetButtonColor(GameColors.WrongAnswer, GameColors.DisabledGray);
                 }
             }
             else
             {
                 temp.SetTextColor(GameColors.TextGray);
-                temp.SetButtonColor(GameColors.DisabledGray);
+                temp.SetButtonColor(GameColors.PrimaryWhite,GameColors.DisabledGray);
             }
         }
     }
@@ -201,7 +202,7 @@ public class UIManager : MonoBehaviour
         foreach(var btn in answerButtons)
         {
             btn.SetBtnInteractablity(true);
-            btn.SetButtonColor(GameColors.PrimaryBlue);
+            btn.SetButtonColor(GameColors.PrimaryWhite,GameColors.PrimaryBlue);
             btn.SetTextColor(GameColors.TextBlue);
         }
     }

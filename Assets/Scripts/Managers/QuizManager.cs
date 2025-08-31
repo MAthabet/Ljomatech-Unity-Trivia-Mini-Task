@@ -1,8 +1,8 @@
 using UnityEngine;
-using TMPro;
 using System.Collections.Generic;
 using System.IO;
 using System;
+using System.Collections;
 
 /// <summary>
 ///  class to control the quiz flow and results
@@ -27,9 +27,12 @@ public class QuizManager : MonoBehaviour
     private int answersPerQuestion = 4;
 
     private List<Question> questionsList;
+    private Coroutine questionTimerCoroutine;
+
     private int score;
     private int maxScore;
     private int currentQuestionIndex;
+
 
     void OnEnable()
     {
@@ -56,7 +59,22 @@ public class QuizManager : MonoBehaviour
             GameEvents.ReportError(e.Message);
         }
     }
-
+    void StartQuestionTimer()
+    {
+        if (questionTimerCoroutine != null)
+        {
+            StopCoroutine(questionTimerCoroutine);
+        }
+        questionTimerCoroutine = StartCoroutine(StartQuestionTimer(timePerQuestion));
+    }
+    void StopQuestionTimer()
+    {
+        if (questionTimerCoroutine != null)
+        {
+            StopCoroutine(questionTimerCoroutine);
+            questionTimerCoroutine = null;
+        }
+    }
     /// <summary>
     /// Load the questions from the json file in the Resources folder
     /// </summary>
@@ -82,7 +100,7 @@ public class QuizManager : MonoBehaviour
     /// <summary>
     ///  reset score and questions
     /// </summary>
-    private void ResetQuiz()
+    public void ResetQuiz()
     {
         PrepareQuiz();
         GameEvents.BroadcastQuizRestart();
@@ -101,6 +119,7 @@ public class QuizManager : MonoBehaviour
     private void NextQuestion()
     {
         ChangeCurrentQuestion(currentQuestionIndex + 1);
+        StartQuestionTimer();
     }
 
     /// <summary>
@@ -122,11 +141,13 @@ public class QuizManager : MonoBehaviour
     }
 
     /// <summary>
-    /// handle score and feedback when an answer is selected
+    /// stop question timer and handle score and feedback when an answer is selected
     /// </summary>
     /// <param name="selectedIndex"></param>
     private void HandleAnswerSelection(int selectedIndex)
     {
+        StopQuestionTimer();
+
         if (selectedIndex >= answersPerQuestion || selectedIndex < 0)
         {
             Debug.LogError("Answer Out Of Bounds");
@@ -141,6 +162,8 @@ public class QuizManager : MonoBehaviour
         {
             GameEvents.BroadcastAnswerFeedback(selectedIndex, false);
         }
+
+        StartCoroutine(StartNextQuestionAfterDelay(timeToMoveToNextQuestion));
     }
     private bool IsAnswerCorrect(int AnswerIndex)
     {
@@ -151,6 +174,7 @@ public class QuizManager : MonoBehaviour
     private void EndQuiz()
     {
         GameEvents.BroadcastQuizEnd(IsQuizPassed());
+        StartCoroutine(RestartQuizAfterDelay(timeToRestartQuiz));
     }
 
     private bool IsQuizPassed()
@@ -162,7 +186,21 @@ public class QuizManager : MonoBehaviour
         }
         return (score / maxScore) > (percantageToPass / 100);
     }
-
+    private IEnumerator RestartQuizAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ResetQuiz();
+    }
+    private IEnumerator StartNextQuestionAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        NextQuestion();
+    }
+    private IEnumerator StartQuestionTimer(float time)
+    {
+        yield return new WaitForSeconds(time);
+        GameEvents.BroadcastQuestionTimerExpired();
+    }
     private void OnDisable()
     {
         GameEvents.OnAnswerSelected -= HandleAnswerSelection;

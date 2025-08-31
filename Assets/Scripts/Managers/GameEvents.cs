@@ -13,6 +13,7 @@ public static class GameEvents
     public static event Action<bool, int> OnAnswerProcessed;
     public static event Action<Question, int> OnQuestionUpdated;
     public static event Action<string> OnError;
+    public static event Action OnQuestionTimerExpired;
     public static event Action<bool> OnQuizEnd;
     public static event Action OnQuizReset;
 
@@ -81,6 +82,10 @@ public static class GameEvents
         OnQuestionUpdated?.Invoke(currentQuestion, questionIndex);
     }
 
+    public static void BroadcastQuestionTimerExpired()
+    {
+        OnQuestionTimerExpired?.Invoke();
+    }
 
     /*
     /// <summary>

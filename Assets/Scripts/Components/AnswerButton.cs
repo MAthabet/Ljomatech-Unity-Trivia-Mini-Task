@@ -8,16 +8,34 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Button))]
 public class AnswerButton : MonoBehaviour
 {
+    [SerializeField]
     private Button button;
+    [SerializeField]
     private TMP_Text answerText;
-    private Image btnImage;
+    [SerializeField]
+    private Image btnBackground;
+    [SerializeField]
+    private Image btnOutline;
     private int buttonIndex = -1;
 
     void Awake()
     {
-        button = GetComponent<Button>();
-        answerText = GetComponentInChildren<TMP_Text>();
-        btnImage = GetComponent<Image>();
+        if (button == null)
+        {
+            button = GetComponent<Button>();
+        }
+        if (answerText == null)
+        {
+            answerText = GetComponentInChildren<TMP_Text>();
+        }
+        if (btnBackground == null)
+        {
+            btnBackground = GetComponentInChildren<Image>();
+        }
+        if (btnOutline == null)
+        {
+            btnOutline = GetComponent<Image>();
+        }
     }
 
     /// <summary>
@@ -45,13 +63,14 @@ public class AnswerButton : MonoBehaviour
     /// <summary>
     /// set the answer background color
     /// </summary>
-    /// <param name="color"> <see cref="GameColors"/> </param>
+    /// <param name="bgColor"> background color <see cref="GameColors"/> </param>
     /// 
-    public void SetButtonColor(Color color)
+    public void SetButtonColor(Color bgColor, Color outlineColor)
     {
-        if (btnImage != null)
+        if (btnOutline != null && btnBackground != null)
         {
-            btnImage.color = color;
+            btnOutline.color = outlineColor;
+            btnBackground.color = bgColor;
         }
         else
         {
