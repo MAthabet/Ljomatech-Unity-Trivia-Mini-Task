@@ -6,20 +6,22 @@ using System;
 public static class GameEvents
 {
     // event that will be broadcast when an answer button is clicked.
-    public static event Action OnStartGameRequested;
+    public static event Action OnStartQuizRequested;
 
     public static event Action OnQuizStart;
     public static event Action<int> OnAnswerSelected;
     public static event Action<bool, int> OnAnswerProcessed;
+    public static event Action<Question, int> OnQuestionUpdated;
     public static event Action<string> OnError;
     public static event Action<bool> OnQuizEnd;
+    public static event Action OnQuizReset;
 
     //public static event Action OnNextQuestionClicked;
 
     /// <summary>
     /// broadcast the start of the quiz (after parsing json file)
     /// </summary>
-    public static void StartQuiz()
+    public static void BroadcastQuizStart()
     {
         OnQuizStart?.Invoke();
     }
@@ -27,11 +29,14 @@ public static class GameEvents
     /// <summary>
     /// broadcast the start of the quiz (after parsing json file)
     /// </summary>
-    public static void ProcessAnswer(int Answerindex, bool isAnswerCorrect)
+    public static void BroadcastAnswerFeedback(int Answerindex, bool isAnswerCorrect)
     {
         OnAnswerProcessed?.Invoke(isAnswerCorrect, Answerindex);
     }
 
+    /// <summary>
+    /// broadcast the error message
+    /// </summary>
     public static void ReportError(string message)
     {
         OnError?.Invoke(message);
@@ -40,15 +45,22 @@ public static class GameEvents
     /// <summary>
     /// broadcast the end of the quiz
     /// </summary>
-    public static void EndQuiz(bool hasPassed)
+    public static void BroadcastQuizEnd(bool hasPassed)
     {
         OnQuizEnd?.Invoke(hasPassed);
+    }
+    /// <summary>
+    /// broadcast restarting of the quiz without being ended
+    /// </summary>
+    public static void BroadcastQuizRestart()
+    {
+        OnQuizReset?.Invoke();
     }
 
     /// <summary>
     /// Any AnswerButton can call this method to broadcast its index to all listeners.
     /// </summary>
-    public static void SelectAnswer(int index)
+    public static void BroadcastAnswerSelection(int index)
     {
         OnAnswerSelected?.Invoke(index);
     }
@@ -56,15 +68,18 @@ public static class GameEvents
     /// <summary>
     /// start button call this method to broadcast the quiz start
     /// </summary>
-    public static void RequestStartGame()
+    public static void RequestStartQuiz()
     {
-        OnStartGameRequested?.Invoke();
+        OnStartQuizRequested?.Invoke();
     }
 
     /// <summary>
-    /// 
+    /// proadcast the new question text and index
     /// </summary>
-    
+    public static void BroadcastQuestionUpdate(Question currentQuestion, int questionIndex )
+    {
+        OnQuestionUpdated?.Invoke(currentQuestion, questionIndex);
+    }
 
 
     /*

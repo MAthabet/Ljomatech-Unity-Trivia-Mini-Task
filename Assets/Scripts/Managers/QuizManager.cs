@@ -28,13 +28,13 @@ public class QuizManager : MonoBehaviour
 
     private List<Question> questionsList;
     private int score;
-    private int totalScore;
+    private int maxScore;
     private int currentQuestionIndex;
 
     void OnEnable()
     {
-        GameEvents.OnAnswerSelected += HandleAnswerSelection;
-        GameEvents.OnStartGameRequested += TryStartGame;
+        GameEvents.OnAnswerSelected += (answerindex) => HandleAnswerSelection(answerindex);
+        GameEvents.OnStartQuizRequested += TryStartGame;
         //GameEvents.OnNextQuestionClicked += NextQuestion;
     }
 
@@ -47,14 +47,13 @@ public class QuizManager : MonoBehaviour
         {
             LoadQuestionsFromJsonFile();
             PrepareQuiz();
-            ChangeCurrentQuestion(currentQuestionIndex);
-            totalScore = questionsList.Count;
-            Debug.Log($"Game started successfully with {totalScore} questions!");
             
+            GameEvents.BroadcastQuizStart();
+            Debug.Log($"Game started successfully with {maxScore} questions!");
         }
         catch (System.Exception e)
         {
-            uiManager.DisplayError(e.Message);
+            GameEvents.ReportError(e.Message);
         }
     }
 
@@ -72,7 +71,7 @@ public class QuizManager : MonoBehaviour
 
         QuestionsList qArray = JsonUtility.FromJson<QuestionsList>(jsonFile.text);
 
-        if (questionsList == null || questionsList.Count == 0)
+        if (qArray == null || qArray.questions.Length == 0)
         {
             throw new System.Exception("JSON file is empty or does not contain a valid questions format");
         }
@@ -81,14 +80,23 @@ public class QuizManager : MonoBehaviour
     }
 
     /// <summary>
-    ///  reset quiz and reshuffle questions
+    ///  reset score and questions
     /// </summary>
+    private void ResetQuiz()
+    {
+        PrepareQuiz();
+        GameEvents.BroadcastQuizRestart();
+    }
     private void PrepareQuiz()
     {
         score = 0;
-        currentQuestionIndex = 0;
-        //TODO:
-        // shuffle questions
+        maxScore = questionsList.Count;
+        ShuffleQuestions();
+        ChangeCurrentQuestion(0);
+    }
+    private void ShuffleQuestions()
+    {
+
     }
     private void NextQuestion()
     {
@@ -97,26 +105,24 @@ public class QuizManager : MonoBehaviour
 
     /// <summary>
     /// set the current question to the target index or end the quiz if the index is out of bounds
-    /// also it tell ui manager to update the ui
     /// </summary>
     /// <param name="targetQuestionIndex"></param>
     private void ChangeCurrentQuestion(int targetQuestionIndex)
     {
         currentQuestionIndex = targetQuestionIndex;
 
-        if (currentQuestionIndex >= totalScore)
+        if (currentQuestionIndex >= maxScore)
         {
             EndQuiz();
             return;
         }
 
-        uiManager.ResetFeedback();
         Question q = questionsList[currentQuestionIndex];
-        uiManager.UpdateQuizUI(q);
+        GameEvents.BroadcastQuestionUpdate(q, currentQuestionIndex);
     }
 
     /// <summary>
-    /// handle score and tell ui manager to feedback when an answer is selected
+    /// handle score and feedback when an answer is selected
     /// </summary>
     /// <param name="selectedIndex"></param>
     private void HandleAnswerSelection(int selectedIndex)
@@ -129,11 +135,11 @@ public class QuizManager : MonoBehaviour
         if (IsAnswerCorrect(selectedIndex))
         {
             score++;
-            uiManager.ShowCorrectFeedback(selectedIndex);
+            GameEvents.BroadcastAnswerFeedback(selectedIndex, true);
         }
         else
         {
-            uiManager.ShowWrongFeedback(selectedIndex);
+            GameEvents.BroadcastAnswerFeedback(selectedIndex, false);
         }
     }
     private bool IsAnswerCorrect(int AnswerIndex)
@@ -144,9 +150,20 @@ public class QuizManager : MonoBehaviour
     }
     private void EndQuiz()
     {
-        throw new NotImplementedException();
+        GameEvents.BroadcastQuizEnd(IsQuizPassed());
     }
-    void OnDisable()
+
+    private bool IsQuizPassed()
+    {
+        if(maxScore <= 0)
+        {
+            Debug.LogError("error in maxScore");
+            return false;
+        }
+        return (score / maxScore) > (percantageToPass / 100);
+    }
+
+    private void OnDisable()
     {
         GameEvents.OnAnswerSelected -= HandleAnswerSelection;
         GameEvents.OnQuizStart -= TryStartGame;

@@ -18,6 +18,6 @@ public class StartQuizButton : MonoBehaviour
 
     private void OnStartQuizClicked()
     {
-        GameEvents.RequestStartGame();
+        GameEvents.RequestStartQuiz();
     }
 }

@@ -10,12 +10,14 @@ public class AnswerButton : MonoBehaviour
 {
     private Button button;
     private TMP_Text answerText;
+    private Image btnImage;
     private int buttonIndex = -1;
 
     void Awake()
     {
         button = GetComponent<Button>();
         answerText = GetComponentInChildren<TMP_Text>();
+        btnImage = GetComponent<Image>();
     }
 
     /// <summary>
@@ -40,9 +42,47 @@ public class AnswerButton : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// set the answer background color
+    /// </summary>
+    /// <param name="color"> <see cref="GameColors"/> </param>
+    /// 
+    public void SetButtonColor(Color color)
+    {
+        if (btnImage != null)
+        {
+            btnImage.color = color;
+        }
+        else
+        {
+            Debug.LogError("Button Image Cannot be found");
+        }
+    }
+    /// <summary>
+    /// set the answer text color
+    /// </summary>
+    /// <param name="color"> <see cref="GameColors"/> </param>
+    public void SetTextColor(Color color)
+    {
+        if (answerText != null)
+        {
+            answerText.color = color;
+        }
+        else
+        {
+            Debug.LogError("Button Text Cannot be found");
+        }
+    }
+    /// <summary>
+    /// set if the answer button can be interacted with
+    /// </summary>
+    public void SetBtnInteractablity(bool canInteract)
+    {
+        button.interactable = canInteract;
+    }
     void OnAnswerSelected()
     {
-        GameEvents.SelectAnswer(buttonIndex);
+        GameEvents.BroadcastAnswerSelection(buttonIndex);
     }
 
 }
