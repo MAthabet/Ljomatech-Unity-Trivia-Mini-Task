@@ -112,9 +112,11 @@ public class QuizManager : MonoBehaviour
         score = 0;
         maxScore = questionsList.Count;
         ShuffleQuestions();
-        ShuffleAnswers();
         ChangeCurrentQuestion(0);
     }
+    /// <summary>
+    /// shuffle questions list in place
+    /// </summary>
     private void ShuffleQuestions()
     {
         int n = questionsList.Count;
@@ -122,15 +124,31 @@ public class QuizManager : MonoBehaviour
         {
             n--;
             int k = rng.Next(n + 1);
-            // Swap the elements
             Question value = questionsList[k];
             questionsList[k] = questionsList[n];
             questionsList[n] = value;
         }
     }
-    private void ShuffleAnswers()
+    /// <summary>
+    /// shuffle question answers in place
+    /// </summary>
+    private void ShuffleAnswers(Question question)
     {
+        if (question == null) return;
 
+        string correctAnswerText = question.answers[question.correctAnswerIndex];
+
+        string[] answers = question.answers;
+        int n = answers.Length;
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            string value = answers[k];
+            answers[k] = answers[n];
+            answers[n] = value;
+        }
+        question.correctAnswerIndex = System.Array.IndexOf(answers, correctAnswerText);
     }
     private void NextQuestion()
     {
@@ -153,6 +171,7 @@ public class QuizManager : MonoBehaviour
         }
 
         Question q = questionsList[currentQuestionIndex];
+        ShuffleAnswers(q);
         GameEvents.BroadcastQuestionUpdate(q, currentQuestionIndex);
     }
 
@@ -200,7 +219,7 @@ public class QuizManager : MonoBehaviour
             Debug.LogError("error in maxScore");
             return false;
         }
-        return (score / maxScore) > (percantageToPass / 100);
+        return ((float)score / (float)maxScore) >= ((float)percantageToPass / 100f);
     }
     private IEnumerator RestartQuizAfterDelay(float delay)
     {
