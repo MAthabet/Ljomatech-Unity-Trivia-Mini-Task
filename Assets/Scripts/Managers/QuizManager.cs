@@ -28,6 +28,7 @@ public class QuizManager : MonoBehaviour
 
     private List<Question> questionsList;
     private Coroutine questionTimerCoroutine;
+    private System.Random rng = new System.Random();
 
     private int score;
     private int maxScore;
@@ -111,9 +112,23 @@ public class QuizManager : MonoBehaviour
         score = 0;
         maxScore = questionsList.Count;
         ShuffleQuestions();
+        ShuffleAnswers();
         ChangeCurrentQuestion(0);
     }
     private void ShuffleQuestions()
+    {
+        int n = questionsList.Count;
+        while (n > 1)
+        {
+            n--;
+            int k = rng.Next(n + 1);
+            // Swap the elements
+            Question value = questionsList[k];
+            questionsList[k] = questionsList[n];
+            questionsList[n] = value;
+        }
+    }
+    private void ShuffleAnswers()
     {
 
     }
