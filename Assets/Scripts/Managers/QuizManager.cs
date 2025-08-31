@@ -34,7 +34,7 @@ public class QuizManager : MonoBehaviour
     void OnEnable()
     {
         GameEvents.OnAnswerSelected += HandleAnswerSelection;
-        GameEvents.OnStartClicked += TryStartGame;
+        GameEvents.OnStartGameRequested += TryStartGame;
         //GameEvents.OnNextQuestionClicked += NextQuestion;
     }
 

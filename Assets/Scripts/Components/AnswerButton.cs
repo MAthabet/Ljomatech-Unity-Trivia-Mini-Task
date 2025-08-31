@@ -42,7 +42,7 @@ public class AnswerButton : MonoBehaviour
 
     void OnAnswerSelected()
     {
-        GameEvents.AnswerSelected(buttonIndex);
+        GameEvents.SelectAnswer(buttonIndex);
     }
 
 }

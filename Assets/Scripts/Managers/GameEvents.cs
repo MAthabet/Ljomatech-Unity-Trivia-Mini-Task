@@ -6,14 +6,13 @@ using System;
 public static class GameEvents
 {
     // event that will be broadcast when an answer button is clicked.
-    public static event Action OnStartClicked;
+    public static event Action OnStartGameRequested;
 
     public static event Action OnQuizStart;
     public static event Action<int> OnAnswerSelected;
-    public static event Action<int> OnCorrectAnswer;
-    public static event Action<int> OnWrongAnswer;
+    public static event Action<bool, int> OnAnswerProcessed;
     public static event Action<string> OnError;
-    public static event Action OnQuizEnd;
+    public static event Action<bool> OnQuizEnd;
 
     //public static event Action OnNextQuestionClicked;
 
@@ -28,19 +27,12 @@ public static class GameEvents
     /// <summary>
     /// broadcast the start of the quiz (after parsing json file)
     /// </summary>
-    public static void FeedbackAnswer(int Answerindex, bool isAnswerCorrect)
+    public static void ProcessAnswer(int Answerindex, bool isAnswerCorrect)
     {
-        if(isAnswerCorrect == true)
-        {
-            OnCorrectAnswer?.Invoke(Answerindex);
-        }
-        else 
-        { 
-            OnWrongAnswer?.Invoke(Answerindex);
-        }
+        OnAnswerProcessed?.Invoke(isAnswerCorrect, Answerindex);
     }
 
-    public static void Error(string message)
+    public static void ReportError(string message)
     {
         OnError?.Invoke(message);
     }
@@ -48,15 +40,15 @@ public static class GameEvents
     /// <summary>
     /// broadcast the end of the quiz
     /// </summary>
-    public static void EndQuiz()
+    public static void EndQuiz(bool hasPassed)
     {
-        OnQuizEnd?.Invoke();
+        OnQuizEnd?.Invoke(hasPassed);
     }
 
     /// <summary>
     /// Any AnswerButton can call this method to broadcast its index to all listeners.
     /// </summary>
-    public static void AnswerSelected(int index)
+    public static void SelectAnswer(int index)
     {
         OnAnswerSelected?.Invoke(index);
     }
@@ -64,9 +56,9 @@ public static class GameEvents
     /// <summary>
     /// start button call this method to broadcast the quiz start
     /// </summary>
-    public static void StartClicked()
+    public static void RequestStartGame()
     {
-        OnStartClicked?.Invoke();
+        OnStartGameRequested?.Invoke();
     }
 
     /// <summary>
